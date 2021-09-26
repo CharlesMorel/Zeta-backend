@@ -38,10 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'api.apps.ApiConfig',
 ]
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
@@ -84,8 +86,14 @@ WSGI_APPLICATION = 'ZetaBackend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'killerbeedd',
+        'HOST': 'DESKTOP-KVOBB20',
+        'USER': 'chercheur',
+        'PASSWORD': '123',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+        },
     }
 }
 
