@@ -17,7 +17,7 @@ class Frisbee(models.Model):
     description=models.CharField(max_length=50)
     pUHT=models.CharField(max_length=50)
     Range=models.IntegerField()
-    list_ingredients=models.ManyToManyField(Ingredient, related_name='ingredient', through="FrisbeeIngredient", through_fields=("pfk_frisbee","pfk_ingredient"))
+    list_ingredients=models.ManyToManyField(Ingredient, through="FrisbeeIngredient", through_fields=("pfk_frisbee","pfk_ingredient"))
 
 
     class Meta:
@@ -25,15 +25,15 @@ class Frisbee(models.Model):
         db_table = 'frisbee'
 
 class FrisbeeIngredient(models.Model):
-    pfk_ingredient=models.OneToOneField(Ingredient, on_delete=models.CASCADE,related_name='ingredients')
-    pfk_frisbee=models.OneToOneField(Frisbee, on_delete=models.CASCADE,related_name='frisbees')
-    grammage=models.IntegerField()
+    pfk_ingredient=models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    pfk_frisbee=models.OneToOneField(Frisbee, on_delete=models.CASCADE, primary_key=True,)
+    grammage=models.IntegerField( blank=True)
 
 
     class Meta:
         managed = False
         db_table = 'frisbee_ingredient'
-        unique_together=("pfk_ingredient_id", "pfk_frisbee_id")
+        unique_together=("pfk_ingredient", "pfk_frisbee")
 
 
 
