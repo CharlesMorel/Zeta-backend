@@ -9,15 +9,13 @@ class Ingredient(models.Model):
         db_table = 'ingredient'
 
 
-
-
 class Frisbee(models.Model):
     id=models.AutoField(primary_key=True)
     name=models.CharField(max_length=50)
     description=models.CharField(max_length=50)
     pUHT=models.CharField(max_length=50)
     Range=models.IntegerField()
-    list_ingredients=models.ManyToManyField(Ingredient, through="FrisbeeIngredient", through_fields=("pfk_frisbee","pfk_ingredient"))
+    list_ingredients=models.ManyToManyField(Ingredient, through="FrisbeeIngredient", through_fields=("pfk_frisbee","pfk_ingredient"), )
 
 
     class Meta:
@@ -25,8 +23,8 @@ class Frisbee(models.Model):
         db_table = 'frisbee'
 
 class FrisbeeIngredient(models.Model):
-    pfk_ingredient=models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    pfk_frisbee=models.OneToOneField(Frisbee, on_delete=models.CASCADE, primary_key=True,)
+    pfk_ingredient=models.ForeignKey(Ingredient, on_delete=models.CASCADE, related_name="ref_ingr")
+    pfk_frisbee=models.OneToOneField(Frisbee, on_delete=models.CASCADE, primary_key=True,  unique=False)
     grammage=models.IntegerField( blank=True)
 
 
@@ -37,7 +35,15 @@ class FrisbeeIngredient(models.Model):
 
 
 
-
+class Process(models.Model):
+    id=models.IntegerField(primary_key=True)
+    name=models.CharField(max_length=50)
+    description = models.CharField(max_length=50)
+    step_description = models.CharField(max_length=200)
+    fk_frisbee=models.ForeignKey(Frisbee, on_delete=models.CASCADE)
+    class Meta:
+        managed = False
+        db_table = 'process'
 
 
 

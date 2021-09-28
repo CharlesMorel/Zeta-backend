@@ -9,5 +9,9 @@ router = routers.DefaultRouter()
 urlpatterns = [
     path('', include(router.urls)),
     path('frisbees/', frisbee_view.FrisbeeList.as_view()),
+    path('frisbees/<int:pk>', frisbee_view.FrisbeeDetail.as_view()),
+
+    path('frisbees_ingredient/', frisbee_view.FrisbeeIngredientList.as_view()),
+    path('frisbees_ingredient/<int:pk>', frisbee_view.FrisbeeIngredientDetail.as_view()),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
