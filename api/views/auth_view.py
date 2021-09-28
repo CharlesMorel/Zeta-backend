@@ -1,8 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from ZetaBackend import settings
-import ldap
+from api.models.UserModel import LdapGroup
+from django.core import serializers
+from api.serializers.LdapGroupSerializer import LdapGroupSerializer
 
 
 class AuthenticationView(APIView):
@@ -10,9 +11,10 @@ class AuthenticationView(APIView):
     def post(self, request):
         data = request.data
         try:
-            return Response(data["email"], status=status.HTTP_201_CREATED)
+            result = serializers.serialize(LdapGroupSerializer, LdapGroup.objects.all())
+            return Response(result, status=status.HTTP_201_CREATED)
         except ImportError:
-            pass
+            print(ImportError.msg)
 
 
 class AuthenticationDetailView(APIView):

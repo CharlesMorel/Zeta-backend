@@ -1,20 +1,17 @@
-from django.db import models
-from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+from ldapdb import models
+from ldapdb.models.fields import CharField, IntegerField, ListField
 
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User)
-    uid = models.CharField(max_length=254)
-    cn = models.CharField(max_length=254)
-    sn = models.CharField(max_length=254)
-    givenName = models.CharField(max_length=254)
-    userPassword = models.CharField(max_length=254)
-    mail = models.EmailField(max_length=254)
+class LdapGroup(models.Model):
+    base_dn = "ou=Informatique,dc=killer-bee,dc=com"
+    object_classes = ['user']
 
+    gid = IntegerField(db_column='gidNumber', unique=True)
+    name = CharField(db_column='cn', max_length=200, primary_key=True)
+    members = ListField(db_column='memberUid')
 
-def create_user_profile(sender, instance, created, **kwargs):
-    UserProfile.objects.get_or_create(user=instance)
+    def __str__(self):
+        return str(self.name)
 
-
-post_save.connect(create_user_profile, sender=User)
+    def __unicode__(self):
+        return str(self.name)

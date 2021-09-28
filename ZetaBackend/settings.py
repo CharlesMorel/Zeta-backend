@@ -11,8 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-import ldap
-from django_auth_ldap.config import LDAPSearch
+import ldapdb
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -81,16 +80,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ZetaBackend.wsgi.application'
 
+AD_LDAP_PORT = 389
+AUTH_LDAP_SERVER_URI = "ldap://172.16.5.10:389/"
+AUTH_LDAP_BIND_DN = "cn=Charles CM. MOREL,ou=Informatique,dc=killer-bee,dc=com"
+AUTH_LDAP_BIND_PASSWORD = "Fr33zB1#"
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
+    'ldap': {
+        'ENGINE': 'ldapdb.backends.ldap',
+        'NAME': AUTH_LDAP_SERVER_URI,
+        'USER': AUTH_LDAP_BIND_DN,
+        'PASSWORD': AUTH_LDAP_BIND_PASSWORD
+    },
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+DATABASE_ROUTERS = ['ldapdb.router.Router']
 
 
 # Password validation
@@ -135,40 +145,3 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-AD_LDAP_PORT = 389
-AUTH_LDAP_SERVER_URI = "172.16.5.10:%s" % AD_LDAP_PORT
-AUTH_LDAP_BIND_DN = "cn=Administrateur,dc=killer-bee,dc=com"
-
-AUTH_LDAP_BIND_PASSWORD = "P1jssfbebP1jssfbeb"
-AUTH_LDAP_USER_SEARCH = LDAPSearch("dc=killer-bee,dc=com",
-                                   ldap.SCOPE_SUBTREE,
-                                   "(sAMAccountName=%(user)s)")
-
-AUTH_LDAP_USER_ATTR_MAP = {
-    "uid": "uid",
-    "cn": "cn",
-    "sn": "sn",
-    "username": "sAMAccountName",
-    "first_name": "givenName",
-    "userPassword": "userPassword",
-    "last_name": "sn",
-    "mail": "mail",
-}
-AUTH_PROFILE_MODULE = 'api.models.UserModel.UserProfile'
-
-from django_auth_ldap.config import ActiveDirectoryGroupType
-AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
-    "dc=killer-bee,dc=com",
-    ldap.SCOPE_SUBTREE,
-    "(objectCategory=Group)"
-)
-AUTH_LDAP_GROUP_TYPE = ActiveDirectoryGroupType(name_attr="cn")
-AUTH_LDAP_FIND_GROUP_PERMS = True
-AUTH_LDAP_CACHE_GROUPS = True
-AUTH_LDAP_GROUP_CACHE_TIMEOUT = 1  # 1 hour cache
-
-AUTHENTICATION_BACKENDS = [
-    'django_auth_ldap.backend.LDAPBackend',
-    'django.contrib.auth.backends.ModelBackend'
-]
