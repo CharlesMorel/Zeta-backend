@@ -78,6 +78,24 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ZetaBackend.wsgi.application'
 
 
+# LDAP configuration
+
+AD_LDAP_PORT = 389
+AUTH_LDAP_SERVER_URI = "ldap://172.16.5.10"
+LDAP_DOMAIN = "killer-bee.com"
+
+AUTHENTICATION_BACKENDS = (
+    "api.backends.LDAPBackend",
+    "django.contrib.auth.backends.ModelBackend",
+)
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "loggers": {"django_auth_ldap": {"level": "DEBUG", "handlers": ["console"]}},
+}
+
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -145,3 +163,5 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ),
 }
+
+API_KEY = "H@L>[P+BI_IY:l$hZ0-5a4d[{h5^Hz_dTPUdSwV$fAV%e]qv)A]y>7Y*t_nj&e"
