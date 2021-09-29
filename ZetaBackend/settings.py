@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import ldap
+from django_auth_ldap.config import LDAPSearch
+import ldapdb
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -44,10 +47,12 @@ INSTALLED_APPS = [
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.AllowAny',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
 }
 
 MIDDLEWARE = [
@@ -79,6 +84,25 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ZetaBackend.wsgi.application'
+
+
+# LDAP configuration
+
+AD_LDAP_PORT = 389
+AUTH_LDAP_SERVER_URI = "ldap://172.16.5.10"
+LDAP_DOMAIN = "killer-bee.com"
+
+AUTHENTICATION_BACKENDS = (
+    "api.backends.LDAPBackend",
+    "django.contrib.auth.backends.ModelBackend",
+)
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "loggers": {"django_auth_ldap": {"level": "DEBUG", "handlers": ["console"]}},
+}
 
 
 # Database
@@ -148,3 +172,5 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ),
 }
+
+API_KEY = "H@L>[P+BI_IY:l$hZ0-5a4d[{h5^Hz_dTPUdSwV$fAV%e]qv)A]y>7Y*t_nj&e"

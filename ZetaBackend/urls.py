@@ -1,6 +1,7 @@
 from django.urls import include, path
 from rest_framework import routers
-from api.views import frisbee_view
+from api.views import frisbee_view, auth_view
+
 
 router = routers.DefaultRouter()
 
@@ -8,6 +9,9 @@ router = routers.DefaultRouter()
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('', include(router.urls)),
+
+    path('auth/', auth_view.AuthenticationView.as_view()),
+
     path('frisbees/', frisbee_view.FrisbeeList.as_view()),
     path('frisbees/<int:pk>', frisbee_view.FrisbeeDetail.as_view()),
 
