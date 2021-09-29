@@ -5,7 +5,7 @@ from ldap3 import Server, Connection
 from ldap3.core.exceptions import LDAPBindError
 
 from ZetaBackend import settings
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, get_user
 
 
 logger = logging.getLogger(__name__)
@@ -24,13 +24,14 @@ class LDAPBackend:
         print('Connected successfully.')
         try:
             print('Trying to create connection for user...')
-            conn = Connection(server, f"{username}@{settings.LDAP_DOMAIN}", password=password, auto_bind=True)
+            Connection(server, f"{username}@{settings.LDAP_DOMAIN}", password=password, auto_bind=True)
             print('Connection established successfully.')
+            return True
         except ImportError:
             print('Failed to connect: ' + ImportError.msg)
-            return None
-        user = UserModel.objects.update_or_create(username=username)
-        return user
+            return False
+
+        # user = UserModel.objects.update_or_create(username=username)
 
     @staticmethod
     def get_user(user_id):
