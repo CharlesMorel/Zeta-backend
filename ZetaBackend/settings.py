@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import ldap
+from django_auth_ldap.config import LDAPSearch
 import ldapdb
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -48,6 +50,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.AllowAny',
     ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
 }
 
 MIDDLEWARE = [
@@ -81,20 +86,37 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ZetaBackend.wsgi.application'
 
 AD_LDAP_PORT = 389
-AUTH_LDAP_SERVER_URI = "ldap://172.16.5.10:389/"
+AUTH_LDAP_SERVER_URI = "ldap://172.16.5.10"
 AUTH_LDAP_BIND_DN = "cn=Charles CM. MOREL,ou=Informatique,dc=killer-bee,dc=com"
 AUTH_LDAP_BIND_PASSWORD = "Fr33zB1#"
+LDAP_DOMAIN = "killer-bee.com"
+
+AUTHENTICATION_BACKENDS = (
+    "api.backends.LDAPBackend",
+    "django.contrib.auth.backends.ModelBackend",
+)
+
+AUTH_LDAP_USER_SEARCH = LDAPSearch("OU=Informatique,DC=killer-bee,DC=com",
+                                   ldap.SCOPE_SUBTREE,
+                                   "(uid=%(user)s)")
+
+AUTH_LDAP_USER_ATTR_MAP = {
+    "first_name": "givenName",
+    "last_name": "sn",
+    "email": "mail"
+}
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "loggers": {"django_auth_ldap": {"level": "DEBUG", "handlers": ["console"]}},
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'ldap': {
-        'ENGINE': 'ldapdb.backends.ldap',
-        'NAME': AUTH_LDAP_SERVER_URI,
-        'USER': AUTH_LDAP_BIND_DN,
-        'PASSWORD': AUTH_LDAP_BIND_PASSWORD
-    },
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
@@ -145,3 +167,5 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+API_KEY = "H@L>[P+BI_IY:l$hZ0-5a4d[{h5^Hz_dTPUdSwV$fAV%e]qv)A]y>7Y*t_nj&e"

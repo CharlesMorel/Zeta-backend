@@ -10,5 +10,4 @@ router = routers.DefaultRouter()
 urlpatterns = [
     path('', include(router.urls)),
     path('auth/', auth_view.AuthenticationView.as_view()),
-    path('auth/<int:pk>/', auth_view.AuthenticationDetailView.as_view()),
 ]
