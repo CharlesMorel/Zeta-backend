@@ -16,6 +16,7 @@ class LDAPBackend:
 
     @staticmethod
     def authenticate(username=None, password=None, **kwargs):
+        print('Authenticating...')
         # set username to lowercase for consistency
         username = username.lower()
         # set your server

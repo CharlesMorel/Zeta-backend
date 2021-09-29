@@ -10,8 +10,9 @@ class AuthenticationView(APIView):
     def post(self, request):
         data = request.data
         try:
-            LDAPBackend.authenticate(username=data['username'],
-                                     password=data['password'])
+            print(data)
+            LDAPBackend.authenticate(username=data['Username'],
+                                     password=data['Password'])
             return Response({"ApiKey": settings.API_KEY, 'userDepartment': 'nothing yet'},
                             status=status.HTTP_201_CREATED)
         except ImportError:
