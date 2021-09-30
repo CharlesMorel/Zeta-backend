@@ -1,8 +1,10 @@
+import datetime
 import logging
-
+import pytz
 import ldap3
 from ldap3 import Server, Connection
 from ldap3.core.exceptions import LDAPBindError
+from api.models import LoginTrial
 
 from ZetaBackend import settings
 from django.contrib.auth import get_user_model, get_user
@@ -22,13 +24,14 @@ class LDAPBackend:
         print('Connecting to server...')
         server = Server(settings.AUTH_LDAP_SERVER_URI, port=settings.AD_LDAP_PORT, get_info=ldap3.ALL)
         print('Connected successfully.')
+        logTrial = LoginTrial.objects.create(username=username, try_at=datetime.datetime.utcnow())
         try:
             print('Trying to create connection for user...')
             Connection(server, f"{username}@{settings.LDAP_DOMAIN}", password=password, auto_bind=True)
             print('Connection established successfully.')
+            LoginTrial.objects.filter(id=logTrial.id).update(success=True)
             return True
         except ImportError:
-            print('Failed to connect: ' + ImportError.msg)
             return False
 
         # user = UserModel.objects.update_or_create(username=username)
