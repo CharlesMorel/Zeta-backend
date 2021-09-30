@@ -3,10 +3,10 @@ from django.db import models
 
 
 class Frisbee(models.Model):
-    id=models.AutoField(primary_key=True)
-    name=models.CharField(max_length=50)
-    description=models.CharField(max_length=50)
-    pUHT=models.CharField(max_length=50)
+    Id=models.AutoField(primary_key=True)
+    Name=models.CharField(max_length=50)
+    Description=models.CharField(max_length=50)
+    PUHT=models.CharField(max_length=50)
     Range=models.IntegerField()
 
     class Meta:
@@ -14,12 +14,22 @@ class Frisbee(models.Model):
         db_table = 'frisbee'
 
 
-class Process(models.Model):
-    id=models.AutoField(primary_key=True)
-    name=models.CharField(max_length=50)
-    description = models.CharField(max_length=50)
-    step_description = models.CharField(max_length=200)
-    fk_frisbee=models.ForeignKey(Frisbee, on_delete=models.CASCADE)
+class GetProcess(models.Model):
+    Id=models.AutoField(primary_key=True)
+    Name=models.CharField(max_length=50)
+    Description = models.CharField(max_length=50)
+    StepDescription = models.CharField(max_length=200, db_column='step_description')
+    Frisbee=models.ForeignKey(Frisbee, on_delete=models.CASCADE, db_column='fk_frisbee_id')
+    class Meta:
+        managed = False
+        db_table = 'process'
+
+class PostProcess(models.Model):
+    Id=models.AutoField(primary_key=True)
+    Name=models.CharField(max_length=50)
+    Description = models.CharField(max_length=50)
+    StepDescription = models.CharField(max_length=200, db_column='step_description')
+    FrisbeeId=models.ForeignKey(Frisbee, on_delete=models.CASCADE, db_column='fk_frisbee_id')
     class Meta:
         managed = False
         db_table = 'process'
