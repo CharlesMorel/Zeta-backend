@@ -40,7 +40,7 @@ class FrisbeeIngredientList(generics.ListCreateAPIView):
 class FrisbeeIngredientDetail(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         fri=self.request.query_params.get('fri')
-        queryset=GetFrisbeeIngredient.objects.all().filter(pfk_frisbee_id=fri, pfk_ingredient_id=self.kwargs['pk'])
+        queryset=GetFrisbeeIngredient.objects.all().filter(Pfk_frisbee_id=fri, Pfk_ingredient_id=self.kwargs['pk'])
         return queryset
     serializer_class = PostFrisbeeIngredientSerializer
 

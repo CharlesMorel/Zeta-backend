@@ -3,9 +3,9 @@ from rest_framework import serializers
 
 
 class PostFrisbeeIngredientSerializer(serializers.ModelSerializer):
-    pfk_frisbee_id=serializers.PrimaryKeyRelatedField
+    Pfk_frisbee_id=serializers.PrimaryKeyRelatedField
     class Meta:
         model = PostFrisbeeIngredient
-        fields = ['pfk_frisbee_id', 'pfk_ingredient_id', 'grammage',]
+        fields = ['Pfk_frisbee_id', 'Pfk_ingredient_id', 'Grammage',]
 
 
