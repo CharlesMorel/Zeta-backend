@@ -109,9 +109,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'killerbeedd',
-        'HOST': 'DESKTOP-KVOBB20',
-        'USER': 'chercheur',
-        'PASSWORD': '123',
+        'HOST': 'DEB-BDD.killer-bee.com',
+        'USER': 'ERP',
+        'PASSWORD': 'ERP123%',
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
         },
