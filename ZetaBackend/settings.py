@@ -107,10 +107,10 @@ LOGGING = {
 
 DATABASES = {
     'default': {
-        'ENGINE': 'sql_server.pyodbc',
+        'ENGINE': 'mssq',
         'NAME': 'killerbeedd',
-        'HOST': 'DESKTOP-KVOBB20',
-        'USER': 'chercheur',
+        'HOST': 'DEB-BDD.killer_bee.com',
+        'USER': 'ERP',
         'PASSWORD': '123',
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
